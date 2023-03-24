@@ -1,10 +1,26 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 export default function App() {
+  const handleClickLogin = async () => {
+    try {
+      const response = await fetch("http:///api/v1/users//auth/facebook", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app test!</Text>
+      <Text>Welcome to One Click event</Text>
+      <Button title="login" onPress={handleClickLogin} />
       <StatusBar style="auto" />
     </View>
   );
