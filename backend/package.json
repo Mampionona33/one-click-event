@@ -2,11 +2,12 @@
   "name": "bakend",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "sever.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.ts",
-    "start": "node server.ts"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Mampionona",
