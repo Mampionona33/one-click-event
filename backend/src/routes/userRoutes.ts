@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import passportFacebook from 'passport-facebook';
 import passport from 'passport';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const FacebookStrategy = passportFacebook.Strategy;
 
 export const router = Router();
-require('dotenv').config();
 
 passport.use(
   new FacebookStrategy(

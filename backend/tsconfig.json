@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
-    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
     "sourceMap": true,
-    "outDir": "dist"
+    "target": "es5",
+    "outDir": "dist",
+    "module": "nodenext"
   },
-  "lib": ["es2015"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
