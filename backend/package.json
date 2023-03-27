@@ -2,17 +2,12 @@
   "name": "bakend",
   "version": "1.0.0",
   "description": "",
-  "engines": {
-    "node": "14.x"
-  },
-  "main": ".dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean:win": "node -e \"if (process.platform === 'win32') process.exit(1)\" || , if exist dist rmdir /Q /S dist",
     "clean:lin": "node -e \"if (process.platform !== 'win32') process.exit(1)\" || rm -rf dist",
-    "build": "npm run clean:win && npm run clean:lin && tsc ",
     "dev": "nodemon src/index.ts",
-    "start": "node dist/index.js"
+    "start": "npm run clean:win && npm run clean:lin && tsc  node dist/index.js"
   },
   "keywords": [],
   "author": "Mampionona",
