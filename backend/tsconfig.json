@@ -6,8 +6,8 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",
-    "outDir": "dist",
-    "module": "nodenext"
+    "outDir": "./dist",
+    "strict": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
