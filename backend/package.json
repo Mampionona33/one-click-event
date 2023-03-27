@@ -7,7 +7,9 @@
     "clean:win": "node -e \"if (process.platform === 'win32') process.exit(1)\" || , if exist dist rmdir /Q /S dist",
     "clean:lin": "node -e \"if (process.platform !== 'win32') process.exit(1)\" || rm -rf dist",
     "dev": "nodemon src/index.ts",
-    "start": "npm run clean:win && npm run clean:lin && tsc  node dist/index.js"
+    "clean": "npm run clean:win && npm run clean:lin && tsc",
+    "build": "npm run clean:win && npm run clean:lin && tsc",
+    "vercel-dev": "node dist/index.js"
   },
   "keywords": [],
   "author": "Mampionona",

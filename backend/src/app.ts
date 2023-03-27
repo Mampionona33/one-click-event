@@ -4,7 +4,9 @@ import { router as userRoutes } from './routes/userRoutes';
 const app: Express = express();
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('response form back test');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  res.send('response form back');
   next();
 });
 

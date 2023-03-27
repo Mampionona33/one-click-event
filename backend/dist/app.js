@@ -7,6 +7,8 @@ var express_1 = __importDefault(require("express"));
 var userRoutes_1 = require("./routes/userRoutes");
 var app = (0, express_1.default)();
 app.get('/', function (req, res, next) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
     res.send('response form back');
     next();
 });
