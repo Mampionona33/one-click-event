@@ -5,7 +5,7 @@
   "engines": {
     "node": "14.x"
   },
-  "main": "./index.ts",
+  "main": ".dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean:win": "node -e \"if (process.platform === 'win32') process.exit(1)\" || , if exist dist rmdir /Q /S dist",
