@@ -2,13 +2,9 @@
   "name": "bakend",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean:win": "node -e \"if (process.platform === 'win32') process.exit(1)\" || , if exist dist rmdir /Q /S dist",
-    "clean:lin": "node -e \"if (process.platform !== 'win32') process.exit(1)\" || rm -rf dist",
-    "dev": "nodemon src/index.ts",
-    "clean": "npm run clean:win && npm run clean:lin && tsc",
+    "dev": "concurrently -k \"tsc -p . -w\" \"nodemon ./dist/index.js\"",
     "vercel-build": "tsc && node dist/index.js",
     "build": "tsc",
     "vercel-dev": "node dist/index.js"
@@ -26,9 +22,11 @@
     "ts-dotenv": "^0.9.1"
   },
   "devDependencies": {
+    "@tsconfig/node14": "^1.0.3",
     "@types/express": "^4.17.17",
     "@types/node": "^18.13.0",
     "@vercel/node": "^2.10.0",
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
