@@ -1,6 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
+export interface IUser extends Document {
+  facebookId: string;
+}
 
-export const userSchema = new mongoose.Schema({
-    
-})
+const UserSchema: Schema = new Schema({
+  facebookId: { type: String, required: true },
+});
+
+export default mongoose.model<IUser>('User', UserSchema);

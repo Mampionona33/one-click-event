@@ -1,5 +1,4 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
     "esModuleInterop": true,
