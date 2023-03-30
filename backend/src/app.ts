@@ -8,6 +8,6 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/users', userRoutes);
 
 export default app;

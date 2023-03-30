@@ -12,31 +12,31 @@ const FacebookStrategy = passportFacebook.Strategy;
 
 export const router = Router();
 
-// passport.use(
-//   new FacebookStrategy(
-//     {
-//       clientID: process.env.FACEBOOK_APP_ID!,
-//       clientSecret: process.env.FACEBOOK_APP_SECRET!,
-//       callbackURL: 'http://localhost:3000/auth/facebook/callback',
-//     },
-//     function (
-//       accessToken: string,
-//       refreshToken: string,
-//       profile: any,
-//       cb: Function
-//     ) {
-//       console.log({
-//         facebookId: profile.id,
-//       });
-//       // User.findOrCreate(
-//       //   { facebookId: profile.id },
-//       //   function (err: Error, user: any) {
-//       //     return cb(err, user);
-//       //   }
-//       // );
-//     }
-//   )
-// );
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID!,
+      clientSecret: process.env.FACEBOOK_APP_SECRET!,
+      callbackURL: 'http://localhost:3000/auth/facebook/callback',
+    },
+    function (
+      accessToken: string,
+      refreshToken: string,
+      profile: any,
+      cb: Function
+    ) {
+      console.log({
+        facebookId: profile.id,
+      });
+      // User.findOrCreate(
+      //   { facebookId: profile.id },
+      //   function (err: Error, user: any) {
+      //     return cb(err, user);
+      //   }
+      // );
+    }
+  )
+);
 
 (router as any).get(
   '/auth/facebook',
