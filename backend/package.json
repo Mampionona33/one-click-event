@@ -30,7 +30,7 @@
     "@types/express": "^4.17.17",
     "@types/node": "^18.13.0",
     "@vercel/node": "^2.10.1",
-    "dotenv-ts": "^0.2.1",
+    "dotenv": "^16.0.3",
     "nodemon": "^2.0.22",
     "pre-commit": "^1.2.2",
     "rimraf": "^4.4.1",
