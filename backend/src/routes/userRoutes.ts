@@ -2,11 +2,7 @@ import { Router } from 'express';
 import passportFacebook from 'passport-facebook';
 import passport from 'passport';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
-
-// require('dotenv-ts').config();
-// import User from '../models/userModel';
 
 const FacebookStrategy = passportFacebook.Strategy;
 
