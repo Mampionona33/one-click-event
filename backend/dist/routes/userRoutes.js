@@ -1,36 +1,32 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.router = void 0;
-const express_1 = require("express");
-const passport_facebook_1 = __importDefault(require("passport-facebook"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const FacebookStrategy = passport_facebook_1.default.Strategy;
+var express_1 = require("express");
+var dotenv = __importStar(require("dotenv"));
+var userController_1 = require("../controller/userController");
+dotenv.config();
 exports.router = (0, express_1.Router)();
-// passport.use(
-//   new FacebookStrategy(
-//     {
-//       clientID: process.env.FACEBOOK_APP_ID,
-//       clientSecret: process.env.FACEBOOK_APP_SECRET,
-//       callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-//     },
-//     function (accessToken, refreshToken, profile, cb) {
-//       console.log(profile);
-//       User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-//         return cb(err, user);
-//       });
-//     }
-//   )
-// );
-// router.get('/auth/facebook', passport.authenticate('facebook'));
-// router.get(
-//   '/auth/facebook/callback',
-//   passport.authenticate('facebook', { failureRedirect: '/login' }),
-//   function (req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect('/');
-//   }
-// );
+exports.router.route('/').get(userController_1.getUsers);
