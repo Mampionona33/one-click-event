@@ -7,6 +7,8 @@ import express, {
 } from 'express';
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const router = Router();
 
@@ -24,11 +26,11 @@ passport.deserializeUser(function (user, done) {
 passport.use(
   new FacebookStrategy(
     {
-      clientID: 'Client ID',
+      clientID: process.env.FACEBOOK_APP_ID,
 
-      clientSecret: 'Client Secret',
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
 
-      callbackURL: 'http://localhost:3000/auth/facebook/callback',
+      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     },
 
     function (accessToken, refreshToken, profile, cb) {

@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/passport-facebook": "^2.1.11",
     "express": "^4.17.1",
+    "express-session": "^1.17.3",
     "mongoose": "^7.0.3",
     "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",
