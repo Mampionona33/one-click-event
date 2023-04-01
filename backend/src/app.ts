@@ -1,6 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { router as userRoutes } from './routes/userRoutes';
-
+import { router as authRoutes } from './routes/authRoutes';
 export const app: Express = express();
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
@@ -8,4 +8,4 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/users', authRoutes, userRoutes);
