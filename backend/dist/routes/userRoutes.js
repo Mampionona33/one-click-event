@@ -27,6 +27,7 @@ exports.router = void 0;
 var express_1 = require("express");
 var dotenv = __importStar(require("dotenv"));
 var userController_1 = require("../controller/userController");
+var fbAuthController_1 = require("../controller/fbAuthController");
 dotenv.config();
 exports.router = (0, express_1.Router)();
-exports.router.route('/').get(userController_1.getUsers);
+exports.router.route('/').get(fbAuthController_1.router, userController_1.getUsers);
