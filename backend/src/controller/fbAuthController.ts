@@ -44,13 +44,14 @@ router.get('/auth/facebook', passport.authenticate('facebook'));
 router.get(
   '/auth/facebook/callback',
 
-  passport.authenticate('facebook', { failureRedirect: '/' }),
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
 
   function (req: Request, res: Response) {
-    console.log('req', req.user);
+    res.redirect('/api/v1/users');
+    // console.log('req', req.user);
 
-    res.render('data', {
-      user: req.user,
-    });
+    // res.render('data', {
+    //   user: req.user,
+    // });
   }
 );

@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import { router as userRoutes } from './routes/userRoutes';
-import { router as authRoutes } from './routes/authRoutes';
+import { router as authRoutes } from './controller/fbAuthController';
 export const app: Express = express();
 
 app.use(
@@ -18,4 +18,4 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use('/api/v1/users', authRoutes, userRoutes);
+app.use('/api/v1/users', userRoutes);
