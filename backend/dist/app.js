@@ -9,13 +9,13 @@ var express_session_1 = __importDefault(require("express-session"));
 var userRoutes_1 = require("./routes/userRoutes");
 var fbAuthController_1 = require("./controller/fbAuthController");
 exports.app = (0, express_1["default"])();
-exports.app.use(fbAuthController_1.requireFacebookAuth);
 exports.app.use((0, express_session_1["default"])({
     secret: 'your secret key',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
 }));
+exports.app.use(fbAuthController_1.router);
 exports.app.get('/', function (req, res, next) {
     res.send('response form back 123');
     next();

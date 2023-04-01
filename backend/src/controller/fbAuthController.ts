@@ -8,6 +8,7 @@ import express, {
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import * as dotenv from 'dotenv';
+import { session } from 'express-session';
 dotenv.config();
 
 export const router = Router();
@@ -41,24 +42,13 @@ passport.use(
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
-export const requireFacebookAuth = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/auth/facebook');
-};
-
 router.get(
   '/auth/facebook/callback',
-  // passport.authenticate('facebook', {
-  //   successRedirect: '/',
-  //   failureRedirect: '/login',
-  // })
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  passport.authenticate('facebook', { failureRedirect: '/auth/facebook' }),
 
   function (req: Request, res: Response) {
-    res.redirect('/api/v1/users');
     console.log('req', req.user);
+    res.redirect('/api/v1/users');
 
     res.render('data', {
       user: req.user,

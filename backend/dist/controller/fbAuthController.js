@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.requireFacebookAuth = exports.router = void 0;
+exports.router = void 0;
 var express_1 = require("express");
 var passport_1 = __importDefault(require("passport"));
 var passport_facebook_1 = require("passport-facebook");
@@ -49,21 +49,9 @@ passport_1["default"].use(new passport_facebook_1.Strategy({
     return cb(null, profile);
 }));
 exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
-var requireFacebookAuth = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/auth/facebook');
-};
-exports.requireFacebookAuth = requireFacebookAuth;
-exports.router.get('/auth/facebook/callback', 
-// passport.authenticate('facebook', {
-//   successRedirect: '/',
-//   failureRedirect: '/login',
-// })
-passport_1["default"].authenticate('facebook', { failureRedirect: '/login' }), function (req, res) {
-    res.redirect('/api/v1/users');
+exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', { failureRedirect: '/auth/facebook' }), function (req, res) {
     console.log('req', req.user);
+    res.redirect('/api/v1/users');
     res.render('data', {
         user: req.user
     });
