@@ -22,11 +22,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 exports.router = void 0;
 var express_1 = require("express");
+var passport_1 = __importDefault(require("passport"));
+var passport_facebook_1 = require("passport-facebook");
 var dotenv = __importStar(require("dotenv"));
-var userController_1 = require("../controller/userController");
 dotenv.config();
 exports.router = (0, express_1.Router)();
-exports.router.route('/').get(userController_1.getUsers);
+exports.router.use(passport_1["default"].initialize());
+exports.router.use(passport_1["default"].session());
+passport_1["default"].serializeUser(function (user, done) {
+    done(null, user);
+});
+passport_1["default"].deserializeUser(function (user, done) {
+    done(null, user);
+});
+passport_1["default"].use(new passport_facebook_1.Strategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK_URL
+}, function (accessToken, refreshToken, profile, cb) {
+    return cb(null, profile);
+}));
+exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
+exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', { failureRedirect: '/auth/facebook' }), function (req, res) {
+    console.log('req', req.user);
+    res.redirect('/api/v1/users');
+    res.render('data', {
+        user: req.user
+    });
+});
