@@ -4,7 +4,7 @@ import { router as authRoutes } from './routes/authRoutes';
 export const app: Express = express();
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('response form back  123');
+  res.send('response form back 123');
   next();
 });
 
