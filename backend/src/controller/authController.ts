@@ -41,6 +41,12 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
+/* 
+  use only FACEBOOK_CALLBACK_URL for all node environment
+  but it's value different for each environment in
+  the vercel application not in this authController
+*/
+
 const facebookCallbackUrl =
   process.env.FACEBOOK_CALLBACK_URL ||
   'http://localhost:3000/auth/facebook/callback';
