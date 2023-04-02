@@ -56,23 +56,29 @@ passport_1["default"].serializeUser(function (user, done) {
 passport_1["default"].deserializeUser(function (user, done) {
     done(null, user);
 });
+var facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
+var basedUrl = 'http://localhost:3000/api/v1';
+if (process.env.NODE_ENV == 'production') {
+    facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
+    basedUrl = process.env.USER_BASED_URL;
+}
 passport_1["default"].use(new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: process.env.FACEBOOK_CALLBACK_URL
+    callbackURL: facebookCallbackUrl
 }, function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
 }));
-exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
+exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook', { successFlash: basedUrl }));
 exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
     failureRedirect: '/auth/facebook'
 }), function (req, res) {
-    // Successful authentication, redirect to user page.
-    res.redirect(process.env.USER_BASED_URL);
+    console.log('Redirection is called');
+    res.redirect('/');
 });
 exports.router.get('/', function (req, res) {
     if (req.isAuthenticated()) {
-        res.redirect(process.env.USER_BASED_URL);
+        res.redirect(basedUrl);
     }
     else {
         res.redirect('/auth/facebook');

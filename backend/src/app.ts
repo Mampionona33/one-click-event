@@ -4,7 +4,7 @@ import { router as authController } from './controller/authController';
 import morgan from 'morgan';
 export const app: Express = express();
 
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
 app.use(authController);
 
