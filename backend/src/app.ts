@@ -9,8 +9,15 @@ app.use(morgan('combined'));
 app.use(authController);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('response form back te 123');
-  next();
+  res.redirect(process.env.USER_BASED_URL);
 });
 
-app.use('/api/v1/users', userRoutes);
+app.get(
+  process.env.USER_BASED_URL,
+  (req: Request, res: Response, next: NextFunction) => {
+    res.send('response form back Test 123');
+    next();
+  }
+);
+
+app.use(`${process.env.USER_BASED_URL}/users`, userRoutes);

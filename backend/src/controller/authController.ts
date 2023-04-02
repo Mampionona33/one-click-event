@@ -50,7 +50,6 @@ passport.use(
     },
 
     function (accessToken, refreshToken, profile, cb) {
-      debug('user profile', profile);
       return cb(null, profile);
     }
   )
@@ -58,42 +57,20 @@ passport.use(
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
-router.get('/', function (req: Request, res: Response) {
-  if (req.isAuthenticated()) {
-    res.redirect('/');
-  } else {
-    res.redirect('/auth/facebook');
-  }
-});
-
 router.get(
   '/auth/facebook/callback',
   passport.authenticate('facebook', {
     failureRedirect: '/auth/facebook',
-    successRedirect: process.env.USER_BASED_URL,
   }),
-  (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err) {
-      res.status(401).send('Error during authentication');
-      res.end();
-    }
+  function (req: Request, res: Response) {
+    // Successful authentication, redirect to user page.
+    res.redirect(process.env.USER_BASED_URL);
   }
-
-  // function (req: Request, res: Response, next: NextFunction) {
-  //   console.log('req', req.user);
-  //   req.login(req.user, function (err) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     return res.redirect('/api/v1/users');
-  //   });
-  // }
-  // function (req: Request, res: Response) {
-  //   console.log('req', req.user);
-  //   res.redirect('/api/v1/users');
-
-  //   res.render('data', {
-  //     user: req.user,
-  //   });
-  // }
 );
+router.get('/', function (req: Request, res: Response) {
+  if (req.isAuthenticated()) {
+    res.redirect(process.env.USER_BASED_URL);
+  } else {
+    res.redirect('/auth/facebook');
+  }
+});
