@@ -62,10 +62,7 @@ passport.use(
   )
 );
 
-router.get(
-  '/auth/facebook',
-  passport.authenticate('facebook', { successFlash: basedUrl })
-);
+router.get('/auth/facebook', passport.authenticate('facebook'));
 
 router.get(
   '/auth/facebook/callback',

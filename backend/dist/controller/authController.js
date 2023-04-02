@@ -69,7 +69,7 @@ passport_1["default"].use(new passport_facebook_1.Strategy({
 }, function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
 }));
-exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook', { successFlash: basedUrl }));
+exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
 exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
     failureRedirect: '/auth/facebook'
 }), function (req, res) {
