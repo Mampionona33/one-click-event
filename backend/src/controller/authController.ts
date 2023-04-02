@@ -40,14 +40,17 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
-let facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_DEV;
-let basedUrl = process.env.USER_BASED_URL;
 
-if (process.env.NODE_ENV.match(/production/gi)) {
-  facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PROD;
-}
-if (process.env.NODE_ENV.match(/preview/gi)) {
-  facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PREVIEW;
+const facebookCallbackUrl =
+  process.env.FACEBOOK_CALLBACK_URL ||
+  'http://localhost:3000/auth/facebook/callback';
+
+let basedUrl = '/api/v1';
+
+console.log(facebookCallbackUrl);
+
+if (process.env.USER_BASED_URL) {
+  basedUrl = process.env.USER_BASED_URL;
 }
 
 passport.use(

@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-dev": "concurrently \"tsc -w\" \"nodemon -w src src/index.ts\"",
+    "vercel-dev": "concurrently \"tsc -w\" \"cross-env NODE_ENV=development nodemon -w src src/index.ts\"",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 dist/index.js",
     "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
@@ -34,6 +34,7 @@
     "@types/node": "^18.13.0",
     "@vercel/node": "^2.10.1",
     "concurrently": "^8.0.1",
+    "cross-env": "^7.0.3",
     "debug": "^4.3.4",
     "dotenv": "^16.0.3",
     "morgan": "^1.10.0",

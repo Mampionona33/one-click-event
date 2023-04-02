@@ -56,19 +56,29 @@ passport_1["default"].serializeUser(function (user, done) {
 passport_1["default"].deserializeUser(function (user, done) {
     done(null, user);
 });
-var facebookCallbackUrl = process.env.;
-var basedUrl = process.env.USER_BASED_URL;
-if (process.env.NODE_ENV == 'production') {
-    facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PROD;
+var facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL ||
+    'http://localhost:3000/auth/facebook/callback';
+// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/development/i)) {
+//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_DEV;
+// }
+// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/Production/i)) {
+//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PROD;
+// }
+// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/Preview/i)) {
+//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PREVIEW;
+// }
+var basedUrl = '/api/v1';
+console.log(facebookCallbackUrl);
+if (process.env.USER_BASED_URL) {
+    basedUrl = process.env.USER_BASED_URL;
 }
-if (passport_1["default"].use(new passport_facebook_1.Strategy({
+passport_1["default"].use(new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: facebookCallbackUrl
 }, function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
-})))
-    ;
+}));
 exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
 exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
     failureRedirect: '/auth/facebook'
