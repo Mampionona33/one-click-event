@@ -56,18 +56,19 @@ passport_1["default"].serializeUser(function (user, done) {
 passport_1["default"].deserializeUser(function (user, done) {
     done(null, user);
 });
-var facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
+var facebookCallbackUrl = process.env.;
 var basedUrl = process.env.USER_BASED_URL;
 if (process.env.NODE_ENV == 'production') {
-    facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
+    facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PROD;
 }
-passport_1["default"].use(new passport_facebook_1.Strategy({
+if (passport_1["default"].use(new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: facebookCallbackUrl
 }, function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
-}));
+})))
+    ;
 exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
 exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
     failureRedirect: '/auth/facebook'
