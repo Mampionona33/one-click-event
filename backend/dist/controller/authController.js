@@ -56,12 +56,11 @@ passport_1["default"].serializeUser(function (user, done) {
 passport_1["default"].deserializeUser(function (user, done) {
     done(null, user);
 });
-// let facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
-// let basedUrl = 'http://localhost:3000/api/v1';
-// if (process.env.NODE_ENV == 'production') {
-// }
-var facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
+var facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
 var basedUrl = process.env.USER_BASED_URL;
+if (process.env.NODE_ENV == 'production') {
+    facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
+}
 passport_1["default"].use(new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,

@@ -40,9 +40,12 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
+let facebookCallbackUrl = 'http://localhost:3000/auth/facebook/callback';
+let basedUrl = process.env.USER_BASED_URL;
 
-const facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
-const basedUrl = process.env.USER_BASED_URL;
+if (process.env.NODE_ENV == 'production') {
+  facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL;
+}
 
 passport.use(
   new FacebookStrategy(
