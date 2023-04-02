@@ -67,6 +67,7 @@ router.get(
     res.redirect(process.env.USER_BASED_URL);
   }
 );
+
 router.get('/', function (req: Request, res: Response) {
   if (req.isAuthenticated()) {
     res.redirect(process.env.USER_BASED_URL);

@@ -15,7 +15,7 @@ exports.app.get('/', function (req, res, next) {
     res.redirect(process.env.USER_BASED_URL);
 });
 exports.app.get(process.env.USER_BASED_URL, function (req, res, next) {
-    res.send('response form back Test 123');
+    res.send('Welcome to one click event api');
     next();
 });
 exports.app.use("".concat(process.env.USER_BASED_URL, "/users"), userRoutes_1.router);

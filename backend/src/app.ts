@@ -15,7 +15,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.get(
   process.env.USER_BASED_URL,
   (req: Request, res: Response, next: NextFunction) => {
-    res.send('response form back Test 123');
+    res.send('Welcome to one click event api');
     next();
   }
 );
