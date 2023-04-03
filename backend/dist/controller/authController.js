@@ -56,17 +56,13 @@ passport_1["default"].serializeUser(function (user, done) {
 passport_1["default"].deserializeUser(function (user, done) {
     done(null, user);
 });
+/*
+  use only FACEBOOK_CALLBACK_URL for all node environment
+  but it's value different for each environment in
+  the vercel application not in this authController
+*/
 var facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL ||
     'http://localhost:3000/auth/facebook/callback';
-// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/development/i)) {
-//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_DEV;
-// }
-// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/Production/i)) {
-//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PROD;
-// }
-// if (process.env.NODE_ENV && process.env.NODE_ENV.match(/Preview/i)) {
-//   facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL_PREVIEW;
-// }
 var basedUrl = '/api/v1';
 console.log(facebookCallbackUrl);
 if (process.env.USER_BASED_URL) {

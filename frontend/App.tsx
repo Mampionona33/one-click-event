@@ -1,30 +1,35 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
 
-export default function App() {
-  const handleClickLogin = async () => {
+const App = () => {
+  const [responseText, setResponseText] = useState("");
+
+  const handlePress = async () => {
     try {
-      const response = await fetch("http:///api/v1/users//auth/facebook", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      const result = await response.json();
-      return result;
+      const response = await fetch(
+        "http://your-backend-api.com/api/v1/auth/facebook",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      setResponseText(JSON.stringify(data));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text>Welcome to One Click event</Text>
-      <Button title="login" onPress={handleClickLogin} />
-      <StatusBar style="auto" />
+      <Text style={styles.title}>Welcome to My App</Text>
+      <Button title="Log in with Facebook" onPress={handlePress} />
+      {responseText ? <Text>{responseText}</Text> : null}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -33,4 +38,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
 });
+
+export default App;
