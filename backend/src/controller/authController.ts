@@ -7,7 +7,7 @@ import express, {
   Router,
 } from 'express';
 import session from 'express-session';
-import passport from 'passport';
+import passport, { Profile } from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -33,11 +33,11 @@ router.use(
 router.use(passport.initialize());
 router.use(passport.session());
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function (user: any, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser(function (user: any, done) {
   done(null, user);
 });
 
@@ -52,8 +52,13 @@ const facebookCallbackUrl =
   'http://localhost:3000/auth/facebook/callback';
 
 let basedUrl = '/api/v1';
-
-console.log(facebookCallbackUrl);
+if (process.env.NODE_ENV != 'production') {
+  console.table([
+    ['facebookCallbackUrl', facebookCallbackUrl],
+    ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
+    ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
+  ]);
+}
 
 if (process.env.USER_BASED_URL) {
   basedUrl = process.env.USER_BASED_URL;
@@ -68,6 +73,31 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, cb) {
       return cb(null, profile);
+    }
+  )
+);
+
+// Add a handler for user logout
+passport.use(
+  'facebook-logout',
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: facebookCallbackUrl,
+      enableProof: true,
+      passReqToCallback: true,
+    },
+    function (req: Request, accessToken, refreshToken, profile: Profile, done) {
+      process.nextTick(function () {
+        // Clear the user session and logout the user
+        req.logout(function (err) {
+          if (err) {
+            return done(err);
+          }
+          return done(null, profile);
+        });
+      });
     }
   )
 );

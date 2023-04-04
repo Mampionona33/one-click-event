@@ -64,7 +64,13 @@ passport_1["default"].deserializeUser(function (user, done) {
 var facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL ||
     'http://localhost:3000/auth/facebook/callback';
 var basedUrl = '/api/v1';
-console.log(facebookCallbackUrl);
+if (process.env.NODE_ENV != 'production') {
+    console.table([
+        ['facebookCallbackUrl', facebookCallbackUrl],
+        ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
+        ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
+    ]);
+}
 if (process.env.USER_BASED_URL) {
     basedUrl = process.env.USER_BASED_URL;
 }
@@ -74,6 +80,24 @@ passport_1["default"].use(new passport_facebook_1.Strategy({
     callbackURL: facebookCallbackUrl
 }, function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
+}));
+// Add a handler for user logout
+passport_1["default"].use('facebook-logout', new passport_facebook_1.Strategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: facebookCallbackUrl,
+    enableProof: true,
+    passReqToCallback: true
+}, function (req, accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+        // Clear the user session and logout the user
+        req.logout(function (err) {
+            if (err) {
+                return done(err);
+            }
+            return done(null, profile);
+        });
+    });
 }));
 exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
 exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
