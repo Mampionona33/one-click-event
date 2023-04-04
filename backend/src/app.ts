@@ -10,25 +10,25 @@ export const app: Express = express();
 
 const allowlist = [process.env.CLIENT_BASED_URL];
 
-const corsOptionsDelegate = (req: Request, callback: Function) => {
-  let corsOptions;
-  if (allowlist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false }; // disable CORS for this request
-  }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
+// const corsOptionsDelegate = (req: Request, callback: Function) => {
+//   let corsOptions;
+//   if (allowlist.indexOf(req.header('Origin')) !== -1) {
+//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false }; // disable CORS for this request
+//   }
+//   callback(null, corsOptions); // callback expects two parameters: error and options
+// };
 
-app.use(cors(corsOptionsDelegate));
+// app.use(cors(corsOptionsDelegate));
 
 app.use(
   cors({
-    origin: 'http://localhost:8080', // Allow requests from only this domain
+    origin: 'http://localhost:19006', // Allow requests from only this domain
   })
 );
 
-app.use(authController);
+// app.use(authController);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.redirect(process.env.USER_BASED_URL);
