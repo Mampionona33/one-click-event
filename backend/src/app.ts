@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-// app.use(authController);
+app.use(authController);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.redirect(process.env.USER_BASED_URL);

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, Linking } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { WebView } from "react-native-webview";
 
 const App = () => {
   const [responseText, setResponseText] = useState("");
   const [showWebView, setShowWebView] = useState(false);
+  const apiUrl =
+    process.env.AUTH_URL_API ||
+    "https://one-click-event-api.vercel.app/auth/facebook/callback";
 
   const handlePress = () => {
     setShowWebView(true);
   };
-  // const redirectUrl = "http://localhost:3000";
-  // Linking.openURL(redirectUrl);
 
   const handleWebViewNavigationStateChange = (event: any) => {
     const { url } = event;
-    if (url.includes("http://localhost:3000")) {
+    if (url.includes(apiUrl)) {
       // Replace with your redirect URL
       const token = url.split("=")[1];
       // setResponseText(token);
@@ -24,11 +25,10 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My App</Text>
       {showWebView ? (
         <WebView
           source={{
-            uri: "http://localhost:3000", // Replace with your Facebook app ID and redirect URL
+            uri: apiUrl, // Replace with your Facebook app ID and redirect URL
           }}
           onNavigationStateChange={handleWebViewNavigationStateChange}
         />
