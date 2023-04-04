@@ -80,11 +80,11 @@ exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate
     failureRedirect: '/auth/facebook'
 }), function (req, res) {
     console.log('Redirection is called');
-    res.redirect('/');
+    res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
 });
 exports.router.get('/', function (req, res) {
     if (req.isAuthenticated()) {
-        res.redirect(basedUrl);
+        res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
     }
     else {
         res.redirect('/auth/facebook');

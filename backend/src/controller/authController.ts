@@ -81,13 +81,13 @@ router.get(
   }),
   function (req: Request, res: Response) {
     console.log('Redirection is called');
-    res.redirect('/');
+    res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
   }
 );
 
 router.get('/', function (req: Request, res: Response) {
   if (req.isAuthenticated()) {
-    res.redirect(basedUrl);
+    res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
   } else {
     res.redirect('/auth/facebook');
   }

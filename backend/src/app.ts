@@ -13,7 +13,7 @@ const allowlist = [process.env.CLIENT_BASED_URL];
 // const corsOptionsDelegate = (req: Request, callback: Function) => {
 //   let corsOptions;
 //   if (allowlist.indexOf(req.header('Origin')) !== -1) {
-//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+//   corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
 //   } else {
 //     corsOptions = { origin: false }; // disable CORS for this request
 //   }
@@ -22,11 +22,11 @@ const allowlist = [process.env.CLIENT_BASED_URL];
 
 // app.use(cors(corsOptionsDelegate));
 
-app.use(
-  cors({
-    origin: 'http://localhost:19006', // Allow requests from only this domain
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'http://localhost:19006', // Allow requests from only this domain
+//   })
+// );
 
 app.use(authController);
 
