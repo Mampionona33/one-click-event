@@ -6,31 +6,43 @@ exports.__esModule = true;
 exports.app = void 0;
 var express_1 = __importDefault(require("express"));
 var userRoutes_1 = require("./routes/userRoutes");
-var authController_1 = require("./controller/authController");
 exports.app = (0, express_1["default"])();
+exports.app.use(express_1["default"].json());
+exports.app.use(express_1["default"].urlencoded({ extended: true }));
 // app.use(morgan('combined'));
 var allowlist = [process.env.CLIENT_BASED_URL];
-// const corsOptionsDelegate = (req: Request, callback: Function) => {
-//   let corsOptions;
-//   if (allowlist.indexOf(req.header('Origin')) !== -1) {
-//   corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-//   } else {
-//     corsOptions = { origin: false }; // disable CORS for this request
-//   }
-//   callback(null, corsOptions); // callback expects two parameters: error and options
-// };
-// app.use(cors(corsOptionsDelegate));
-// app.use(
-//   cors({
-//     origin: 'http://localhost:19006', // Allow requests from only this domain
-//   })
-// );
-exports.app.use(authController_1.router);
+// Middleware Express pour gérer les requêtes
+exports.app.use(function (req, res, next) {
+    var origin = req.headers.origin;
+    if (allowlist.includes(origin)) {
+        // Autoriser l'accès à la ressource depuis cette URL
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    else {
+        // Bloquer l'accès à la ressource depuis toutes les autres URL
+        res.setHeader('Access-Control-Allow-Origin', null);
+    }
+    // Continuer le traitement de la requête
+    next();
+});
+// Rediriger tout les requete vers /api/v1
 exports.app.get('/', function (req, res, next) {
     res.redirect(process.env.USER_BASED_URL);
 });
 exports.app.get(process.env.USER_BASED_URL, function (req, res, next) {
-    res.send('Welcome to one click event api');
+    res.setHeader('title', 'One click event Api');
+    var responsData = {
+        message: 'Welcome to one click event api'
+    };
+    res.json(responsData);
     next();
 });
 exports.app.use("".concat(process.env.USER_BASED_URL, "/users"), userRoutes_1.router);
+if (process.env.NODE_ENV != 'production') {
+    console.table([
+        ['facebookCallbackUrl', process.env.FACEBOOK_CALLBACK_URL],
+        ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
+        ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
+        ['process.env.CLIENT_BASED_URL', process.env.CLIENT_BASED_URL],
+    ]);
+}

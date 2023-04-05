@@ -64,13 +64,6 @@ passport_1["default"].deserializeUser(function (user, done) {
 var facebookCallbackUrl = process.env.FACEBOOK_CALLBACK_URL ||
     'http://localhost:3000/auth/facebook/callback';
 var basedUrl = '/api/v1';
-if (process.env.NODE_ENV != 'production') {
-    console.table([
-        ['facebookCallbackUrl', facebookCallbackUrl],
-        ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
-        ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
-    ]);
-}
 if (process.env.USER_BASED_URL) {
     basedUrl = process.env.USER_BASED_URL;
 }

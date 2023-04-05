@@ -5,31 +5,28 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 export const app: Express = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // app.use(morgan('combined'));
 
 const allowlist = [process.env.CLIENT_BASED_URL];
 
-// const corsOptionsDelegate = (req: Request, callback: Function) => {
-//   let corsOptions;
-//   if (allowlist.indexOf(req.header('Origin')) !== -1) {
-//   corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-//   } else {
-//     corsOptions = { origin: false }; // disable CORS for this request
-//   }
-//   callback(null, corsOptions); // callback expects two parameters: error and options
-// };
+// Middleware Express pour gérer les requêtes
+app.use(function (req, res, next) {
+  const origin = req.headers.origin;
+  if (allowlist.includes(origin)) {
+    // Autoriser l'accès à la ressource depuis cette URL
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    // Bloquer l'accès à la ressource depuis toutes les autres URL
+    res.setHeader('Access-Control-Allow-Origin', null);
+  }
+  // Continuer le traitement de la requête
+  next();
+});
 
-// app.use(cors(corsOptionsDelegate));
-
-// app.use(
-//   cors({
-//     origin: 'http://localhost:19006', // Allow requests from only this domain
-//   })
-// );
-
-app.use(authController);
-
+// Rediriger tout les requete vers /api/v1
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.redirect(process.env.USER_BASED_URL);
 });
@@ -37,9 +34,22 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.get(
   process.env.USER_BASED_URL,
   (req: Request, res: Response, next: NextFunction) => {
-    res.send('Welcome to one click event api');
+    res.setHeader('title', 'One click event Api');
+    const responsData = {
+      message: 'Welcome to one click event api',
+    };
+    res.json(responsData);
     next();
   }
 );
 
 app.use(`${process.env.USER_BASED_URL}/users`, userRoutes);
+
+if (process.env.NODE_ENV != 'production') {
+  console.table([
+    ['facebookCallbackUrl', process.env.FACEBOOK_CALLBACK_URL],
+    ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
+    ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
+    ['process.env.CLIENT_BASED_URL', process.env.CLIENT_BASED_URL],
+  ]);
+}
