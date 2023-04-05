@@ -68,7 +68,10 @@ var basedUrl = '/api/v1';
 if (process.env.USER_BASED_URL) {
     basedUrl = process.env.USER_BASED_URL;
 }
-passport_1["default"].use(new passport_facebook_1.Strategy({
+// Add a variable to store the authentication provider
+var authProvider = '';
+// Configure the Facebook authentication strategy
+passport_1["default"].use('facebook', new passport_facebook_1.Strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: facebookCallbackUrl
@@ -93,26 +96,8 @@ passport_1["default"].use('facebook-logout', new passport_facebook_1.Strategy({
         });
     });
 }));
-exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
-exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
-    failureRedirect: '/auth/facebook'
-}), function (req, res) {
-    console.log('Redirection is called');
-    res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
-});
-exports.router.get('/', function (req, res) {
-    if (req.isAuthenticated()) {
-        res.redirect(basedUrl); // Rediriger vers la page d'accueil de votre application
-    }
-    else {
-        res.redirect('/auth/facebook');
-    }
-});
-/*
-  GOOGLE AUTHENTIFICATION PART
-*/
-// Create google authentification
-passport_1["default"].use(new passport_google_oauth2_1.Strategy({
+// Configure the Google authentication strategy
+passport_1["default"].use('google', new passport_google_oauth2_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
@@ -122,8 +107,57 @@ passport_1["default"].use(new passport_google_oauth2_1.Strategy({
         return done(err, user);
     });
 }));
-exports.router.get('/auth/google', passport_1["default"].authenticate('google', { scope: ['email', 'profile'] }));
-exports.router.get('/auth/google/callback', passport_1["default"].authenticate('google', {
-    successRedirect: '/auth/google/success',
-    failureRedirect: '/auth/google/failure'
+// Middleware to check if user is authenticated
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ message: 'User not authenticated' });
+};
+// Facebook authentication route
+exports.router.get('/auth/facebook', passport_1["default"].authenticate('facebook'));
+// Facebook authentication callback route
+exports.router.get('/auth/facebook/callback', passport_1["default"].authenticate('facebook', {
+    successRedirect: "".concat(basedUrl, "/auth/success"),
+    failureRedirect: "".concat(basedUrl, "/auth/failure")
 }));
+// Facebook logout route
+exports.router.get('/auth/facebook/logout', function (req, res) {
+    // Set the authentication provider
+    authProvider = 'facebook';
+    // Redirect to the Facebook logout page
+    res.redirect("https://www.facebook.com/logout.php?next=".concat(process.env.FACEBOOK_LOGOUT_URL, "&access_token=").concat(req.user.accessToken));
+});
+// Google authentication route
+exports.router.get('/auth/google', passport_1["default"].authenticate('google', {
+    scope: ['profile', 'email']
+}));
+// Google authentication callback route
+exports.router.get('/auth/google/callback', passport_1["default"].authenticate('google', {
+    successRedirect: "".concat(basedUrl, "/auth/success"),
+    failureRedirect: "".concat(basedUrl, "/auth/failure")
+}));
+// Google logout route
+exports.router.get('/auth/google/logout', function (req, res) {
+    // Set the authentication provider
+    authProvider = 'google';
+    // Redirect to the Google logout page
+    res.redirect("https://accounts.google.com/o/oauth2/revoke?token=".concat(req.user.accessToken));
+});
+// Success authentication route
+exports.router.get('/auth/success', isAuthenticated, function (req, res) {
+    if (authProvider === 'facebook') {
+        // Redirect to the Facebook logout page to remove permissions
+        res.redirect("https://www.facebook.com/logout.php?next=".concat(process.env.FACEBOOK_LOGOUT_URL, "&access_token=").concat(req.user.accessToken));
+    }
+    else if (authProvider === 'google') {
+        // Redirect to the Google logout page to remove permissions
+        res.redirect("https://accounts.google.com/o/oauth2/revoke?token=".concat(req.user.accessToken));
+    }
+    res.json({ message: 'User authenticated successfully' });
+});
+// Failure authentication route
+exports.router.get('/auth/failure', function (req, res) {
+    res.status(401).json({ message: 'User authentication failed' });
+});
+exports["default"] = exports.router;
