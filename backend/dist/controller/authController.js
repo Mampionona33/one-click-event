@@ -32,6 +32,7 @@ var express_1 = require("express");
 var express_session_1 = __importDefault(require("express-session"));
 var passport_1 = __importDefault(require("passport"));
 var passport_facebook_1 = require("passport-facebook");
+var passport_google_oauth2_1 = require("passport-google-oauth2");
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
 exports.router = (0, express_1.Router)();
@@ -107,3 +108,22 @@ exports.router.get('/', function (req, res) {
         res.redirect('/auth/facebook');
     }
 });
+/*
+  GOOGLE AUTHENTIFICATION PART
+*/
+// Create google authentification
+passport_1["default"].use(new passport_google_oauth2_1.Strategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    passReqToCallback: true
+}, function (req, accessToken, refreshToken, profile, done) {
+    (function (err, user) {
+        return done(err, user);
+    });
+}));
+exports.router.get('/auth/google', passport_1["default"].authenticate('google', { scope: ['email', 'profile'] }));
+exports.router.get('/auth/google/callback', passport_1["default"].authenticate('google', {
+    successRedirect: '/auth/google/success',
+    failureRedirect: '/auth/google/failure'
+}));

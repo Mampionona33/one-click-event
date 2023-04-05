@@ -9,6 +9,7 @@ import express, {
 import session from 'express-session';
 import passport, { Profile } from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -53,7 +54,6 @@ const facebookCallbackUrl =
 
 let basedUrl = '/api/v1';
 
-
 if (process.env.USER_BASED_URL) {
   basedUrl = process.env.USER_BASED_URL;
 }
@@ -95,7 +95,6 @@ passport.use(
     }
   )
 );
-
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
 router.get(
@@ -116,3 +115,36 @@ router.get('/', function (req: Request, res: Response) {
     res.redirect('/auth/facebook');
   }
 });
+
+/* 
+  GOOGLE AUTHENTIFICATION PART
+*/
+
+// Create google authentification
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      passReqToCallback: true,
+    },
+    (req: Request, accessToken, refreshToken, profile, done) => {
+      (err, user) => {
+        return done(err, user);
+      };
+    }
+  )
+);
+
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
+);
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/auth/google/success',
+    failureRedirect: '/auth/google/failure',
+  })
+);
