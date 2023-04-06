@@ -10,8 +10,8 @@ export const facebook = {
 };
 
 export const google = {
-  clientID: process.env.GMAIL_APP_ID,
-  clientSecret: process.env.GMAIL_APP_SECRET,
-  //todo: based on env, change url to localhost, dev or prod
-  callbackURL: `${process.env.API_BASED_URL}/google/callback`,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  passReqToCallback: true,
 };

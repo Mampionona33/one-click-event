@@ -3,54 +3,71 @@ import { router as userRoutes } from './routes/userRoutes';
 import { router as authController } from './controller/authController';
 import morgan from 'morgan';
 import cors from 'cors';
+import 'dotenv/config';
 
 export const app: Express = express();
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
-app.use(authController);
 
-// app.use(morgan('combined'));
+app.use('/', authController);
 
-const allowlist = [process.env.CLIENT_BASED_URL];
-
-// Middleware Express pour gérer les requêtes
-app.use(function (req, res, next) {
-  const origin = req.headers.origin;
-  if (allowlist.includes(origin)) {
-    // Autoriser l'accès à la ressource depuis cette URL
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    // Bloquer l'accès à la ressource depuis toutes les autres URL
-    res.setHeader('Access-Control-Allow-Origin', null);
-  }
-  // Continuer le traitement de la requête
-  next();
-});
-
-// Rediriger tout les requete vers /api/v1
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.redirect(process.env.USER_BASED_URL);
+  res.redirect('/api/v1');
 });
 
-app.get(
-  process.env.USER_BASED_URL,
-  (req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('title', 'One click event Api');
-    const responsData = {
-      message: 'Welcome to one click event api',
-    };
-    res.json(responsData);
-    next();
-  }
-);
+const whiteList = [process.env.CLIENT_BASED_URL];
 
-app.use(`${process.env.USER_BASED_URL}/users`, userRoutes);
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+app.get('/api/v1', (req: Request, res: Response, next: NextFunction) => {
+  res.send('welcom to my app');
+});
+// app.get(
+//   '/api/v1',
+//   cors(corsOptions),
+//   (req: Request, res: Response, next: NextFunction) => {
+//     res.send('welcom to my app');
+//   }
+// );
 
+//////////  LOGGER //////////
 if (process.env.NODE_ENV != 'production') {
   console.table([
-    ['facebookCallbackUrl', process.env.FACEBOOK_CALLBACK_URL],
-    ['process.env.FACEBOOK_APP_ID', process.env.FACEBOOK_APP_ID],
-    ['process.env.FACEBOOK_APP_SECRET', process.env.FACEBOOK_APP_SECRET],
-    ['process.env.CLIENT_BASED_URL', process.env.CLIENT_BASED_URL],
+    {
+      Variables: 'facebookCallbackUrl',
+      url: process.env.FACEBOOK_CALLBACK_URL,
+    },
+    {
+      Variables: 'process.env.FACEBOOK_APP_ID',
+      url: process.env.FACEBOOK_APP_ID,
+    },
+    {
+      Variables: 'process.env.FACEBOOK_APP_SECRET',
+      url: process.env.FACEBOOK_APP_SECRET,
+    },
+    {
+      Variables: 'process.env.CLIENT_BASED_URL',
+      url: process.env.CLIENT_BASED_URL,
+    },
+    {
+      Variables: 'process.env.GOOGLE_CLIENT_ID',
+      url: process.env.GOOGLE_CLIENT_ID,
+    },
+    {
+      Variables: 'process.env.GOOGLE_CLIENT_SECRET',
+      url: process.env.GOOGLE_CLIENT_SECRET,
+    },
+    {
+      Variables: 'process.env.GOOGLE_CALLBACK_URL',
+      url: process.env.GOOGLE_CALLBACK_URL,
+    },
   ]);
 }
