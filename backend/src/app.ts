@@ -28,7 +28,7 @@ var corsOptions = {
   },
 };
 app.get('/api/v1', (req: Request, res: Response, next: NextFunction) => {
-  res.send('welcom to my app');
+  res.json({ message: 'Welcome to one-click-event-api' });
 });
 // app.get(
 //   '/api/v1',
