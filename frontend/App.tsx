@@ -1,16 +1,21 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, Linking } from "react-native";
 import { WebView } from "react-native-webview";
+import Login from "./src/screens/Login";
+import GoogleLogin from "./src/screens/GoogleLogin";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const handleClickGoogleLogin = () => {
-    alert("button clicked");
-  };
-
   return (
-    <View style={styles.container}>
-      <Button title="Login whith Google" onPress={handleClickGoogleLogin} />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="GoogleLogin" component={GoogleLogin} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
